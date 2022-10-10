@@ -18,7 +18,7 @@ const RoutesMain = () => {
       />
       <Route path="/Register" element={<Register back={back} />} />
       <Route path="/" element={<Dashboard user={user} setUser={setUser} />} />
-      <Route path="*" element={<Navigate to="/Login" />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };
