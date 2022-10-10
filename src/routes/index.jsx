@@ -12,13 +12,13 @@ const RoutesMain = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Dashboard user={user} setUser={setUser} />} />
       <Route
         path="/Login"
         element={<Login toRegister={toRegister} setUser={setUser} />}
       />
       <Route path="/Register" element={<Register back={back} />} />
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="/" element={<Dashboard user={user} setUser={setUser} />} />
+      <Route path="*" element={<Navigate to="/Login" />} />
     </Routes>
   );
 };
