@@ -20,11 +20,15 @@ const GlobalStyle = createGlobalStyle`
     justify-content: center;
   }
 
+  a{
+    text-decoration: none;
+  }
+
   ol, ul, li {
     list-style: none;
   } 
 
-  button{
+  button, select{
     cursor: pointer;
   }
 

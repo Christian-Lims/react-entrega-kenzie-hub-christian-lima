@@ -1,25 +1,28 @@
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Logo from "../../components/Logo";
 import { ButtonDefault } from "../../components/Buttons/styled";
-import { NavBar, Header, Main } from "./styled";
-import { useEffect } from "react";
+import { NavBar, Header, Main, DivMain } from "./styled";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/Authcontext";
+import { CardTech } from "../../components/CardTech/CardTech";
+//import { TechContext } from "../../contexts/TechContext";
 
-const Dashboard = ({ user, setUser }) => {
-  const token = localStorage.getItem("@TOKEN");
+const Dashboard = () => {
+  const { user, setUser } = useContext(AuthContext);
+  //  const { techEdit } = useContext(TechContext);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!token || token === "undefined") {
-      navigate("/Login");
-    }
-  }, []);
 
   const goOut = () => {
     localStorage.clear();
     navigate("/Login");
     setUser("");
   };
+
+  const newTec = () => {
+    navigate("/AddTech");
+  };
+
   return (
     <>
       <NavBar>
@@ -35,13 +38,21 @@ const Dashboard = ({ user, setUser }) => {
         </div>
       </Header>
       <Main>
-        <div>
-          <h1>Que pena! Estamos em desenvolvimento :(</h1>
-          <p>
-            Nossa aplicação está em desenvolvimento, em breve teremos novidades
-          </p>
-        </div>
+        <main>
+          <DivMain>
+            <div>
+              <h1>Tecnologias</h1>
+              <button onClick={() => newTec()}>+</button>
+            </div>
+            <ul>
+              {user.techs.map((tech) => (
+                <CardTech key={tech.id} tech={tech} />
+              ))}
+            </ul>
+          </DivMain>
+        </main>
       </Main>
+      <Outlet />
     </>
   );
 };

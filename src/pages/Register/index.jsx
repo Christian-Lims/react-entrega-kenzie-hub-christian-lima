@@ -2,12 +2,11 @@ import { useForm } from "react-hook-form";
 import Logo from "../../components/Logo";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import api from "../../services/api";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { ContainerForm, DivForm } from "../../components/FormStyled/styled";
 import { ButtonDefault, ButtonPrimary } from "../../components/Buttons/styled";
 import { DivHeader, FormHeader } from "./styled";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/Authcontext";
 
 const schema = yup.object({
   name: yup.string().required("Nome é obrigatório!"),
@@ -32,38 +31,15 @@ const schema = yup.object({
 });
 
 const Register = ({ back }) => {
-  const navigate = useNavigate();
+  const { registerUser } = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const registerUser = (data) => {
-    api
-      .post("/users", data)
-      .then((res) => {
-        toast.success("Conta criada!", {
-          position: "top-right",
-          autoClose: 2000,
-          theme: "dark",
-        });
-        navigate("/Login");
-      })
-      .catch((err) => {
-        toast.error("E-mail já existe!", {
-          position: "top-right",
-          autoClose: 2000,
-          theme: "dark",
-        });
-        console.log(err.response.data.message);
-      });
-    reset();
-  };
 
   return (
     <ContainerForm>
