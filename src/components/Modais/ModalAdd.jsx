@@ -7,7 +7,7 @@ import { DivModal } from "./styled";
 import { ButtonPrimary } from "../Buttons/styled";
 
 const schema = yup.object({
-  title: yup.string().required("Status obrigatório!"),
+  title: yup.string().required("Tecnologia obrigatória!"),
   status: yup.string().required("Status obrigatório!"),
 });
 

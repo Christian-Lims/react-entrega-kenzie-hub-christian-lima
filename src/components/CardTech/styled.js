@@ -24,4 +24,12 @@ export const CardBtn = styled.button`
     font-size: 12px;
     color: var(--color-grey-1);
   }
+
+  & :hover {
+    background-color: var(--color-grey-2);
+
+    p {
+      color: var(--color-grey-0);
+    }
+  }
 `;

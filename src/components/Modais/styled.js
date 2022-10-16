@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const DivModal = styled.div`
   background: rgba(18, 18, 20, 0.5);
   display: flex;
-  position: absolute;
+  position: fixed;
   top: 0;
   height: 100vh;
   width: 100vw;

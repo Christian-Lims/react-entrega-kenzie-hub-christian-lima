@@ -65,6 +65,7 @@ export const Main = styled.main`
 
   main {
     display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 1000px;
     align-items: center;
@@ -78,6 +79,14 @@ export const Main = styled.main`
     line-height: 28px;
     color: var(--color-grey-0);
   }
+
+  p {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 28px;
+    color: var(--color-grey-1);
+  }
+
   ul {
     background-color: var(--color-grey-3);
     border-radius: 4px;
@@ -85,6 +94,7 @@ export const Main = styled.main`
     gap: 0.8rem;
     display: flex;
     flex-direction: column;
+    width: 100%;
   }
 `;
 

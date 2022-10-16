@@ -1,5 +1,7 @@
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from "../services/api";
 
 export const TechContext = createContext({});
 
@@ -17,16 +19,61 @@ const TechProvider = ({ children }) => {
     navigate("/");
   };
 
-  const addTec = (data) => {
-    console.log(data);
+  const addTec = async (data) => {
+    try {
+      const res = await api.post("/users/techs", data);
+      toast.success("Tecnologia criada!", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "dark",
+      });
+      navigate("/");
+    } catch (error) {
+      toast.error("Tecnologia já cadastrada!", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "dark",
+      });
+      console.log(error.response.data.message);
+    }
   };
 
-  const editTec = (data) => {
-    console.log(data);
+  const editTec = async (data) => {
+    try {
+      const res = await api.put(`/users/techs/${techEdit.id}`, data);
+      toast.success("Status atualizado!", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "dark",
+      });
+      navigate("/");
+    } catch (error) {
+      toast.error("Erro", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "dark",
+      });
+      console.log(error.response.data.message);
+    }
   };
 
-  const deleteTec = (id) => {
-    console.log(id);
+  const deleteTec = async (id) => {
+    try {
+      const res = await api.delete(`/users/techs/${id}`);
+      toast.success("Tecnologia deletada!", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "dark",
+      });
+      navigate("/");
+    } catch (error) {
+      toast.error("Erro", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "dark",
+      });
+      console.log(error.response.data.message);
+    }
   };
 
   return (

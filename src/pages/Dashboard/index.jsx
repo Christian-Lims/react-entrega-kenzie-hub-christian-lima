@@ -44,11 +44,19 @@ const Dashboard = () => {
               <h1>Tecnologias</h1>
               <button onClick={() => newTec()}>+</button>
             </div>
-            <ul>
-              {user.techs.map((tech) => (
-                <CardTech key={tech.id} tech={tech} />
-              ))}
-            </ul>
+
+            {!!user.techs.length && (
+              <ul>
+                {user.techs.map((tech) => (
+                  <CardTech key={tech.id} tech={tech} />
+                ))}
+              </ul>
+            )}
+            {!user.techs.length && (
+              <p>
+                Nenhuma tecnologia cadastrada! Cadastre uma nova tecnologia.
+              </p>
+            )}
           </DivMain>
         </main>
       </Main>

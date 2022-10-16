@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
     };
     loadUser();
-  }, []);
+  }, [user]);
 
   const registerUser = async (data) => {
     try {

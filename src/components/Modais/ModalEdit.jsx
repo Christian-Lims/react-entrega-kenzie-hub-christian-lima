@@ -45,7 +45,10 @@ export const ModalEdit = () => {
           <p>{errors.status?.message}</p>
           <div>
             <ButtonPrimary type="submit">Salvar alterações</ButtonPrimary>
-            <ButtonSecundary onClick={() => deleteTec(techEdit.id)}>
+            <ButtonSecundary
+              type="button"
+              onClick={() => deleteTec(techEdit.id)}
+            >
               Excluir
             </ButtonSecundary>
           </div>
