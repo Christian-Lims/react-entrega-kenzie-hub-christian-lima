@@ -5,11 +5,12 @@ import { NavBar, Header, Main, DivMain } from "./styled";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/Authcontext";
 import { CardTech } from "../../components/CardTech/CardTech";
-//import { TechContext } from "../../contexts/TechContext";
+import { TechContext } from "../../contexts/TechContext";
+import { Loading } from "../../components/Loading/Loading";
 
 const Dashboard = () => {
-  const { user, setUser } = useContext(AuthContext);
-  //  const { techEdit } = useContext(TechContext);
+  const { user, setUser, techs } = useContext(AuthContext);
+  const { loadingTec } = useContext(TechContext);
 
   const navigate = useNavigate();
 
@@ -44,15 +45,14 @@ const Dashboard = () => {
               <h1>Tecnologias</h1>
               <button onClick={() => newTec()}>+</button>
             </div>
-
-            {!!user.techs.length && (
+            {!!techs.length && (
               <ul>
-                {user.techs.map((tech) => (
+                {techs.map((tech) => (
                   <CardTech key={tech.id} tech={tech} />
                 ))}
               </ul>
             )}
-            {!user.techs.length && (
+            {!techs.length && (
               <p>
                 Nenhuma tecnologia cadastrada! Cadastre uma nova tecnologia.
               </p>
@@ -60,6 +60,7 @@ const Dashboard = () => {
           </DivMain>
         </main>
       </Main>
+      {!!loadingTec && <Loading></Loading>}
       <Outlet />
     </>
   );
