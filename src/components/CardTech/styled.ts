@@ -1,17 +1,14 @@
 import styled from "styled-components";
 
-export const CardBtn = styled.button`
-  border: none;
-  background-color: transparent;
-  li {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-    background: var(--color-grey-4);
-    border-radius: 4px;
-    padding: 1rem;
-  }
+export const CardLi = styled.li`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  background: var(--color-grey-4);
+  border-radius: 4px;
+  padding: 1rem;
+  cursor: pointer;
 
   h2 {
     font-weight: 700;
@@ -25,7 +22,7 @@ export const CardBtn = styled.button`
     color: var(--color-grey-1);
   }
 
-  & :hover {
+  &:hover {
     background-color: var(--color-grey-2);
 
     p {

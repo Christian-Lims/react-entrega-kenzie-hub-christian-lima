@@ -1,14 +1,49 @@
+import { AxiosError } from "axios";
 import { createContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../services/api";
+import { iLoginFormData } from "../pages/Login";
+import { iRegisterFormData } from "../pages/Register";
+import api, { iApiError } from "../services/api";
 
-export const AuthContext = createContext({});
+interface iAuthContextProps {
+  children: React.ReactNode;
+}
 
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [techs, setTechs] = useState([]);
+interface iAuthContext {
+  registerUser(data: iRegisterFormData): Promise<void>;
+  loginUser: (data: iLoginFormData) => Promise<void>;
+  user: iUser | null;
+  setUser: React.Dispatch<React.SetStateAction<iUser | null>>;
+  loading: boolean;
+  techs: iTechs[];
+  setTechs: React.Dispatch<React.SetStateAction<iTechs[]>>;
+}
+
+interface iUser {
+  id: string;
+  name: string;
+  email: string;
+  course_module: string;
+  bio: string | null;
+  contact: string | null;
+  techs: iTechs[];
+}
+
+export interface iTechs {
+  id: string;
+  title: string;
+  status: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export const AuthContext = createContext({} as iAuthContext);
+
+const AuthProvider = ({ children }: iAuthContextProps) => {
+  const [user, setUser] = useState<iUser | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [techs, setTechs] = useState([] as iTechs[]);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,7 +57,8 @@ const AuthProvider = ({ children }) => {
           setUser(data);
           setTechs(data.techs);
         } catch (error) {
-          console.error(error);
+          const requestError = error as AxiosError<iApiError>;
+          console.error(requestError.response?.data.message);
           localStorage.clear();
         }
       }
@@ -32,7 +68,7 @@ const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
-  const registerUser = async (data) => {
+  const registerUser = async (data: iRegisterFormData) => {
     try {
       const res = await api.post("/users", data);
       toast.success("Conta criada!", {
@@ -47,11 +83,12 @@ const AuthProvider = ({ children }) => {
         autoClose: 2000,
         theme: "dark",
       });
-      console.error(error.response.data.message);
+      const requestError = error as AxiosError<iApiError>;
+      console.error(requestError.response?.data.message);
     }
   };
 
-  const loginUser = async (data) => {
+  const loginUser = async (data: iLoginFormData) => {
     try {
       const res = await api.post("/sessions", data);
       //localStorage.setItem("@USERID", res.data.user.id);
@@ -73,7 +110,8 @@ const AuthProvider = ({ children }) => {
         autoClose: 2000,
         theme: "dark",
       });
-      console.error(error.response.data.message);
+      const requestError = error as AxiosError<iApiError>;
+      console.error(requestError.response?.data.message);
     }
   };
 
