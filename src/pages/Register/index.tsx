@@ -8,6 +8,20 @@ import { DivHeader, FormHeader } from "./styled";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/Authcontext";
 
+export interface iRegisterFormData {
+  email: string;
+  password: string;
+  confirm?: string;
+  name: string;
+  bio: string | null;
+  contact: string | null;
+  course_module: string;
+}
+
+interface iRegisterProps {
+  back: () => void;
+}
+
 const schema = yup.object({
   name: yup.string().required("Nome é obrigatório!"),
   email: yup.string().email("Email inválido!").required("Email é obrigatório!"),
@@ -30,14 +44,14 @@ const schema = yup.object({
   course_module: yup.string().required("Módulo é obrigatório!"),
 });
 
-const Register = ({ back }) => {
+const Register = ({ back }: iRegisterProps) => {
   const { registerUser } = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iRegisterFormData>({
     resolver: yupResolver(schema),
   });
 

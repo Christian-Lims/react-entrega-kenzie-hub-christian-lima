@@ -1,29 +1,52 @@
+import { AxiosError } from "axios";
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../services/api";
-import { AuthContext } from "./Authcontext";
+import { iAddTechFormData } from "../components/Modais/ModalAdd";
+import { iEditTechFormData } from "../components/Modais/ModalEdit";
+import api, { iApiError } from "../services/api";
+import { AuthContext, iTechs } from "./Authcontext";
 
-export const TechContext = createContext({});
+interface iTechContextProps {
+  children: React.ReactNode;
+}
 
-const TechProvider = ({ children }) => {
-  const { user, techs, setTechs } = useContext(AuthContext);
-  const [techEdit, setTechEdit] = useState("");
-  const [loadingTec, setLoadingTec] = useState(false);
+interface iTechEdit {
+  title?: string;
+  status: string;
+  id?: string;
+}
+
+interface iTechContext {
+  editTechnology: (tec: iTechs) => void;
+  techEdit: iTechEdit | null;
+  close: () => void;
+  addTec: (data: iAddTechFormData) => Promise<void>;
+  editTec: (data: iEditTechFormData) => Promise<void>;
+  deleteTec: (id: string | undefined) => Promise<void>;
+  loadingTec: boolean;
+}
+
+export const TechContext = createContext({} as iTechContext);
+
+const TechProvider = ({ children }: iTechContextProps) => {
+  const { techs, setTechs } = useContext(AuthContext);
+  const [techEdit, setTechEdit] = useState<iTechEdit | null>(null);
+  const [loadingTec, setLoadingTec] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const editTechnology = (tec) => {
+  const editTechnology = (tec: iTechs) => {
     setTechEdit(tec);
     navigate("/EditTech");
   };
 
   const close = () => {
-    setTechEdit("");
+    setTechEdit(null);
     navigate("/");
   };
 
-  const addTec = async (data) => {
+  const addTec = async (data: iAddTechFormData) => {
     try {
       setLoadingTec(true);
       const res = await api.post("/users/techs", data);
@@ -41,22 +64,25 @@ const TechProvider = ({ children }) => {
         autoClose: 1500,
         theme: "dark",
       });
-      console.error(error.response.data.message);
+      const requestError = error as AxiosError<iApiError>;
+      console.error(requestError.response?.data.message);
     }
     setLoadingTec(false);
   };
 
-  const editTec = async (data) => {
+  const editTec = async (data: iEditTechFormData) => {
     try {
       setLoadingTec(true);
-      const res = await api.put(`/users/techs/${techEdit.id}`, data);
+      const res = await api.put(`/users/techs/${techEdit?.id}`, data);
       toast.success("Status atualizado!", {
         position: "top-right",
         autoClose: 1500,
         theme: "dark",
       });
       navigate("/");
-      const newArrTechs = techs.filter((element) => element.id !== techEdit.id);
+      const newArrTechs = techs.filter(
+        (element) => element.id !== techEdit?.id
+      );
       setTechs([...newArrTechs, res.data]);
     } catch (error) {
       toast.error("Erro", {
@@ -64,12 +90,14 @@ const TechProvider = ({ children }) => {
         autoClose: 1500,
         theme: "dark",
       });
-      console.error(error.response.data.message);
+
+      const requestError = error as AxiosError<iApiError>;
+      console.error(requestError.response?.data.message);
     }
     setLoadingTec(false);
   };
 
-  const deleteTec = async (id) => {
+  const deleteTec = async (id: string | undefined) => {
     try {
       setLoadingTec(true);
       const res = await api.delete(`/users/techs/${id}`);
@@ -87,7 +115,8 @@ const TechProvider = ({ children }) => {
         autoClose: 1500,
         theme: "dark",
       });
-      console.error(error.response.data.message);
+      const requestError = error as AxiosError<iApiError>;
+      console.error(requestError.response?.data.message);
     }
     setLoadingTec(false);
   };

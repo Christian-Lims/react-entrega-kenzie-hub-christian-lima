@@ -17,7 +17,7 @@ const Dashboard = () => {
   const goOut = () => {
     localStorage.clear();
     navigate("/Login");
-    setUser("");
+    setUser(null);
   };
 
   const newTec = () => {
@@ -34,8 +34,8 @@ const Dashboard = () => {
       </NavBar>
       <Header>
         <div>
-          <h1>Olá, {user.name}</h1>
-          <span>{user.course_module}</span>
+          <h1>Olá, {user?.name}</h1>
+          <span>{user?.course_module}</span>
         </div>
       </Header>
       <Main>
@@ -47,9 +47,15 @@ const Dashboard = () => {
             </div>
             {!!techs.length && (
               <ul>
-                {techs.map((tech) => (
-                  <CardTech key={tech.id} tech={tech} />
-                ))}
+                {techs
+                  .sort(function (x, y) {
+                    const a = x.title.toUpperCase(),
+                      b = y.title.toUpperCase();
+                    return a === b ? 0 : a > b ? 1 : -1;
+                  })
+                  .map((tech) => (
+                    <CardTech key={tech.id} tech={tech} />
+                  ))}
               </ul>
             )}
             {!techs.length && (

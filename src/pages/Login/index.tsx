@@ -9,6 +9,11 @@ import { DivHeader, DivFooter, Title } from "./styled";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/Authcontext";
 
+export interface iLoginFormData {
+  email: string;
+  password: string;
+}
+
 const schema = yup.object({
   email: yup.string().required("Email é obrigatório!"),
   password: yup.string().required("Senha obrigatória!"),
@@ -21,7 +26,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iLoginFormData>({
     resolver: yupResolver(schema),
   });
 

@@ -4,21 +4,25 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { DivModal } from "./styled";
-import { ButtonPrimary } from "../Buttons/styled";
+import { ButtonPrimary, ButtonSecundary } from "../Buttons/styled";
+
+export interface iEditTechFormData {
+  title: string;
+  status: string;
+}
 
 const schema = yup.object({
-  title: yup.string().required("Tecnologia obrigatória!"),
   status: yup.string().required("Status obrigatório!"),
 });
 
-export const ModalAdd = () => {
-  const { close, addTec } = useContext(TechContext);
+export const ModalEdit = () => {
+  const { techEdit, close, editTec, deleteTec } = useContext(TechContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iEditTechFormData>({
     resolver: yupResolver(schema),
   });
 
@@ -26,26 +30,33 @@ export const ModalAdd = () => {
     <DivModal>
       <div>
         <div>
-          <h1>Cadastrar Tecnologia</h1>
+          <h1>Tecnologia Detalhes</h1>
           <button onClick={close}>x</button>
         </div>
-        <form onSubmit={handleSubmit(addTec)}>
-          <label htmlFor="tecnology">Nome</label>
+        <form onSubmit={handleSubmit(editTec)}>
+          <label htmlFor="tecnology">Nome do projeto</label>
           <input
             type="text"
             id="tecnology"
-            placeholder="Typescript"
-            {...register("title")}
+            placeholder={techEdit?.title}
+            disabled
           />
-          <p>{errors.title?.message}</p>
-          <label htmlFor="status">Selecionar status</label>
+          <label htmlFor="status">Status</label>
           <select id="status" placeholder="Status" {...register("status")}>
             <option value="Iniciante">Iniciante</option>
             <option value="Intermediário">Intermediário</option>
             <option value="Avançado">Avançado</option>
           </select>
           <p>{errors.status?.message}</p>
-          <ButtonPrimary type="submit">Cadastrar Tecnologia</ButtonPrimary>
+          <div>
+            <ButtonPrimary type="submit">Salvar alterações</ButtonPrimary>
+            <ButtonSecundary
+              type="button"
+              onClick={() => deleteTec(techEdit?.id)}
+            >
+              Excluir
+            </ButtonSecundary>
+          </div>
         </form>
       </div>
     </DivModal>
